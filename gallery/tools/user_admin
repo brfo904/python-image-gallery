@@ -1,4 +1,33 @@
-import json
+def get_menu():
+    menu = "1)\tList users\n2)\tAdd User\n3)\tEdit user\n4)\tDelete user\n5)\tQuit\n"
+    print(menu)
+    option = int(input("Enter your command: "))
+
+    while option != 5:
+        if option == 1:
+            print("List Users to come")
+            get_menu()
+        elif option == 2:
+            print("Add Users to come")
+            get_menu()
+        elif option == 3:
+            print("Edit users to come")
+            get_menu()
+        elif option == 4:
+            get_menu()
+            print("Delete users to come")
+        else:
+            print("Invalid selection. Try again!")
+            get_menu()
+
+    print("Bye!")
+    exit()
+
 
 def main():
-	print("hello")
+    get_menu()
+
+
+if __name__ == "__main__":
+    main()
+
