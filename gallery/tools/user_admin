@@ -14,23 +14,16 @@ def get_menu():
     option = int(input("Enter your command: "))
     while option != 5:
         if option == 1:
-            print("\nusername\tpassword\tfull name")
-            print("-----------------------------------------")
-            for users in User.myUsers:
-                print(users.username + "\t\t" + users.password + "\t\t" + users.full_name)
+            print_users()
             get_menu()
         elif option == 2:
-            username = str(input("Username: "))
-            password = str(input("Password: "))
-            fullname = str(input("Full name: "))
-            if not(add_user(username, password, fullname)):
-                print("Error: user with username " + username + " already exists\n")
+            add_user_checker()
             get_menu()
         elif option == 3:
-            print("Edit users to come")
+            edit_user_checker()
             get_menu()
         elif option == 4:
-            print("Delete users to come")
+            delete_user_checker()
             get_menu()
         else:
             print("Invalid selection. Try again!")
@@ -40,14 +33,73 @@ def get_menu():
     exit()
 
 
-def add_user(username, password, fullname):
+def print_users():
+    print("\nusername\tpassword\tfull name")
+    print("-------------------------------")
+    for users in User.myUsers:
+        print(users.username + "\t\t" + users.password + "\t\t" + users.full_name)
+
+
+def add_user_checker():
+    username = str(input("Username: ")).strip()
+    password = str(input("Password: ")).strip()
+    fullname = str(input("Full name: "))
     safe = True
     for users in User.myUsers:
         if username == users.username:
             safe = False
     if safe:
-        added_user = User(username, password, fullname)
-    return safe
+        do_add(username, password, fullname)
+    else:
+        print("Error: user with username fred already exists")
+
+
+def do_add(uname, pword, fname):
+    added_user = User(uname, pword, fname)
+
+
+def edit_user_checker():
+    to_edit = -1
+    user_edit = str(input("Username to edit: ")).strip()
+    for users in User.myUsers:
+        if user_edit == users.username:
+            to_edit = User.myUsers.index(users)
+    if to_edit != -1:
+        do_edit(to_edit)
+    else:
+        print("No such user.")
+
+
+def do_edit(index):
+    new_pw = str(input("New password (press enter to keep current): "))
+    new_fn = str(input("New full name (press enter to keep current: "))
+    if not new_pw == "":
+        User.myUsers[index].password = new_pw
+    if not new_fn == "":
+        User.myUsers[index].full_name = new_fn
+
+
+def delete_user_checker():
+    to_del = -1
+    user_del = str(input("Username to edit: ")).strip()
+    for users in User.myUsers:
+        if user_del == users.username:
+            to_del = User.myUsers.index(users)
+    if to_del != -1:
+        do_delete(to_del)
+    else:
+        print("No such user.")
+
+
+def do_delete(index):
+    name = User.myUsers[index].username
+    confirm = str(input(f'Are you sure you want to delete {name}? Type \"Yes\" to confirm.')).strip()
+    confirm.lower()
+    if confirm == "yes":
+        User.myUsers.pop(index)
+        print("\nUser deleted")
+    else:
+        print("\nNot confirmed, ignoring command.")
 
 
 def main():
