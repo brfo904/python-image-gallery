@@ -5,7 +5,7 @@ class User:
         self.username = username
         self.password = password
         self.full_name = full_name
-        self.__class__.myUsers.append(self)
+        self.__class__.myUsers.insert(0, self)
 
 
 def get_menu():
@@ -93,9 +93,8 @@ def delete_user_checker():
 
 def do_delete(index):
     name = User.myUsers[index].username
-    confirm = str(input(f'Are you sure you want to delete {name}? Type \"Yes\" to confirm.')).strip()
-    confirm.lower()
-    if confirm == "yes":
+    confirm = str(input(f'Are you sure you want to delete {name}? Type \"Yes\" to confirm: ')).strip()
+    if confirm == "Yes":
         User.myUsers.pop(index)
         print("\nUser deleted")
     else:
@@ -103,6 +102,9 @@ def do_delete(index):
 
 
 def main():
+    wilma = User("Wilma", "bedrock", "Wilma Flintstone")
+    barney = User("barney", "blah", "Barney Rubble")
+    fred = User("fred", "monkey", "Fred Flintstone")
     get_menu()
 
 
