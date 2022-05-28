@@ -1,27 +1,53 @@
+class User:
+    myUsers = list()
+
+    def __init__(self, username, password, full_name):
+        self.username = username
+        self.password = password
+        self.full_name = full_name
+        self.__class__.myUsers.append(self)
+
+
 def get_menu():
-    menu = "1)\tList users\n2)\tAdd User\n3)\tEdit user\n4)\tDelete user\n5)\tQuit\n"
+    menu = "1)\tList users\n2)\tAdd User\n3)\tEdit user\n4)\tDelete user\n5)\tQuit"
     print(menu)
     option = int(input("Enter your command: "))
-
     while option != 5:
         if option == 1:
-            print("List Users to come")
+            print("\nusername\tpassword\tfull name")
+            print("-----------------------------------------")
+            for users in User.myUsers:
+                print(users.username + "\t\t" + users.password + "\t\t" + users.full_name)
             get_menu()
         elif option == 2:
-            print("Add Users to come")
+            username = str(input("Username: "))
+            password = str(input("Password: "))
+            fullname = str(input("Full name: "))
+            if not(add_user(username, password, fullname)):
+                print("Error: user with username " + username + " already exists\n")
             get_menu()
         elif option == 3:
             print("Edit users to come")
             get_menu()
         elif option == 4:
-            get_menu()
             print("Delete users to come")
+            get_menu()
         else:
             print("Invalid selection. Try again!")
             get_menu()
 
     print("Bye!")
     exit()
+
+
+def add_user(username, password, fullname):
+    safe = True
+    for users in User.myUsers:
+        if username == users.username:
+            safe = False
+    if safe:
+        added_user = User(username, password, fullname)
+    return safe
 
 
 def main():
