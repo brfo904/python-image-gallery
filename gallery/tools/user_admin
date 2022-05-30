@@ -49,7 +49,7 @@ def get_menu():
             print("\n")
             get_menu()
         elif option == 4:
-            print("to come")
+            delete_user_checker()
             print("\n")
             get_menu()
         else:
@@ -73,16 +73,19 @@ def list_users():
         fullname = row[2]
         print(username + "\t" + password + "\t" + fullname)
     res.close()
+    connection.close()
+
 
 def add_user_checker():
     addeduser = str(input('Username> ')).strip()
     addedpw = str(input('Password> ')).strip()
     addedfull = str(input('Full name> '))
     connect()
-    query = "select * FROM users WHERE username=%s;"
+    query = "select * FROM users WHERE username=(%s);"
     res = execute(query, (addeduser,))
     if res.rowcount > 0:
         res.close()
+        connection.close()
         print("Error: user with username " + addeduser + " already exists")
     else:
         do_add(addeduser, addedpw, addedfull)
@@ -92,17 +95,18 @@ def do_add(user, pword, fname):
     connect()
     query = "INSERT INTO users (username, password, full_name) VALUES (%s, %s, %s);"
     res = execute(query, (user, pword, fname))
-    res.close()
     connection.commit()
-
+    res.close()
+    connection.close()
 
 def edit_user_checker():
     user_check = str(input("Username to edit> "))
     connect()
-    query = "select * FROM users WHERE username=%s;"
+    query = "select * FROM users WHERE username=(%s);"
     res = execute(query, (user_check,))
     if res.rowcount == 0:
         res.close()
+        connection.close()
         print("No such user.")
     else:
         do_edit(user_check)
@@ -112,15 +116,42 @@ def do_edit(user_to_edit):
     newPass = str(input("New password (press enter to keep current)> "))
     newName = str(input("New full name (press enter to keep current)> "))
     if not newPass == "":
-        query = "update users set password = (%s) where username = (%s)"
+        query = "update users set password=(%s) where username=(%s);"
         res = execute(query, (newPass, user_to_edit))
         connection.commit()
         res.close()
     if not newName == "":
-        query = "update users set full_name = (%s) where username = (%s)"
+        query = "update users set full_name=(%s) where username=(%s);"
         res = execute(query, (newName, user_to_edit))
         connection.commit()
         res.close()
+        connection.close()
+
+
+def delete_user_checker():
+    user_delete = str(input("Enter username to delete> ")).strip()
+    connect()
+    query = "select * FROM users WHERE username=(%s);"
+    res = execute(query, (user_delete,))
+    if res.rowcount == 0:
+        res.close()
+        connection.close()
+        print("No such user.")
+    else:
+        do_delete(user_delete)
+
+
+def do_delete(user_to_delete):
+    confirm = str(input("Are you sure you want to delete " + user_to_delete + "? Enter \"Yes\" to confirm> ")).strip()
+    if confirm == "Yes":
+        connect()
+        query = "delete from users where username=(%s);"
+        res = execute(query, (user_to_delete,))
+        
+        connection.commit()
+        connection.close()
+    else:
+        print("Action ignored, no confirmation provided.")
 
 
 def main():
