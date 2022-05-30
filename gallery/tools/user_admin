@@ -38,18 +38,23 @@ def get_menu():
     while option != 5:
         if option == 1:
             list_users()
+            print("\n")
             get_menu()
         elif option == 2:
-            print("to come")
+            add_user_checker()
+            print("\n")
             get_menu()
         elif option == 3:
-            print("to come")
+            edit_user_checker()
+            print("\n")
             get_menu()
         elif option == 4:
             print("to come")
+            print("\n")
             get_menu()
         else:
             print("Invalid selection. Try again!")
+            print("\n")
             get_menu()
 
     print("Bye!")
@@ -67,6 +72,55 @@ def list_users():
         password = row[1]
         fullname = row[2]
         print(username + "\t" + password + "\t" + fullname)
+    res.close()
+
+def add_user_checker():
+    addeduser = str(input('Username> ')).strip()
+    addedpw = str(input('Password> ')).strip()
+    addedfull = str(input('Full name> '))
+    connect()
+    query = "select * FROM users WHERE username=%s;"
+    res = execute(query, (addeduser,))
+    if res.rowcount > 0:
+        res.close()
+        print("Error: user with username " + addeduser + " already exists")
+    else:
+        do_add(addeduser, addedpw, addedfull)
+
+
+def do_add(user, pword, fname):
+    connect()
+    query = "INSERT INTO users (username, password, full_name) VALUES (%s, %s, %s);"
+    res = execute(query, (user, pword, fname))
+    res.close()
+    connection.commit()
+
+
+def edit_user_checker():
+    user_check = str(input("Username to edit> "))
+    connect()
+    query = "select * FROM users WHERE username=%s;"
+    res = execute(query, (user_check,))
+    if res.rowcount == 0:
+        res.close()
+        print("No such user.")
+    else:
+        do_edit(user_check)
+
+
+def do_edit(user_to_edit):
+    newPass = str(input("New password (press enter to keep current)> "))
+    newName = str(input("New full name (press enter to keep current)> "))
+    if not newPass == "":
+        query = "update users set password = (%s) where username = (%s)"
+        res = execute(query, (newPass, user_to_edit))
+        connection.commit()
+        res.close()
+    if not newName == "":
+        query = "update users set full_name = (%s) where username = (%s)"
+        res = execute(query, (newName, user_to_edit))
+        connection.commit()
+        res.close()
 
 
 def main():
