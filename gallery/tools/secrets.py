@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 def get_secret_image_gallery():
 
-    secret_name = "arn:aws:secretsmanager:us-east-1:456441622985:secret:sec-ig-image_gallery-YdkZcQ"
+    secret_name = "arn:aws:secretsmanager:us-east-1:456441622985:secret:sec-ig-postgres-3UNpe8"
     region_name = "us-east-1"
 
     # Create a Secrets Manager client
@@ -55,6 +55,7 @@ def get_secret_image_gallery():
             secret = get_secret_value_response['SecretString']
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+
 
     if secret is None:
         return decoded_binary_secret
