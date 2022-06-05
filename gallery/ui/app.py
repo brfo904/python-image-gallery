@@ -6,49 +6,30 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    return 'welcome home'
-
-
-@app.route('/admin/usermenu')
-def menu():
-    return get_menu()
+    return render_template('home.html')
 
 
 @app.route('/admin')
 def main_menu():
-    return 'sup? this will be the admin menu.'
+    return render_template('adminmenu.html')
 
 
-@app.route('/admin/userlist')
+@app.route('/admin/listusers')
 def list_users():
-    return 'this will list the users'
+    return render_template('listusers.html')
 
 
 @app.route('/admin/adduser')
-def add_user():
-    return 'this will add users'
+def add_users():
+    return render_template('adduser.html')
 
 
 @app.route('/admin/edituser')
 def edit_user():
-    return 'this will edit user'
+    return render_template('edituser.html')
 
 
 @app.route('/admin/deleteuser')
 def delete_user():
-    return 'this will delete user'
+	return render_template('deleteuser.html')
 
-
-def get_menu():
-    menu = """
-<!DOCTYPE html>
-<html>
-  <head>
-   <title>Image Gallery User Menu</title>
-   <meta charset="utf-8" />
-  </head>
-  <body>
-   <p>Hello</p>
-  </body>
-</html>"""
-    return menu
