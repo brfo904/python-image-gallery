@@ -38,13 +38,12 @@
    <h1>Admin Menu</h1>
     <section>
         <h2>Welcome to the Admin Menu</h2>
-		<p>What would you like to do?</p>
-			<ol>
-				<li><a href="/admin/listusers">List Users</a></li>
-				<li><a href="/admin/adduser">Add User</a></li>
-				<li><a href="/admin/edituser">Edit User</a></li>
-				<li><a href="/admin/deleteuser">Delete Users</a></li>
-			</ol>
+		<h3>Users:</h3>
+		<ol>
+		{% for person in userlist %}
+			<li><a href="/admin/edituser/{{person.username}}">{{person.name}}</a> | <a href="/admin/deleteuser">Delete User</a>
+		{% endfor %}
+		</ol>
     </section>
 	
 	<section>

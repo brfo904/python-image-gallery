@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 def get_secret_image_gallery():
 
-    secret_name = "arn:aws:secretsmanager:us-east-1:456441622985:secret:sec-ig-postgres-3UNpe8"
+    secret_name = "arn:aws:secretsmanager:us-east-1:456441622985:secret:sec-ig-image_gallery-YdkZcQ"
     region_name = "us-east-1"
 
     # Create a Secrets Manager client

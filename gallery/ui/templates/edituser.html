@@ -37,9 +37,10 @@
 <body>
    <h1>Admin Menu</h1>
     <section>
-        <h2>Edit User</h2>
-		<form method="POST">
-			User Name: <input name="un0" value="" /><br /><br>
+        <h2>Edit User: {{name}}</h2>
+		<form action = "/admin/edit_user_confirm/{{name}}" method="POST">
+			New Password (leave blank if no change): <input name="pw" value="" /><br /><br>
+			New Full Name (leave blank if no change): <input name="fname" value="" /><br /><br>
 			<input type="submit" value="Submit" />
 		</form>
     </section>
