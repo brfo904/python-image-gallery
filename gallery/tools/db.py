@@ -64,6 +64,25 @@ def update_fname(username, full_name):
    results = execute(fname_update, (full_name, username))
 
 
+def delete(username):
+   connect()
+   delete = "delete from users where username=(%s);"
+   results = execute(delete, (username,))
+
+
+def usercheck(username):
+   connect()
+   checker = "select * from users where username=(%s);"
+   results = execute(checker, (username,))
+   return(results.rowcount > 0)
+
+
+def user_add(username, pword, fname):
+   connect()
+   add = "INSERT INTO users (username, password, full_name) VALUES (%s, %s, %s);"
+   results = execute(add, (username, pword, fname))
+
+
 def main():
     connect()
     res = execute('select * from users')

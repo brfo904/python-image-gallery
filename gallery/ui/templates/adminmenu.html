@@ -41,12 +41,15 @@
 		<h3>Users:</h3>
 		<ol>
 		{% for person in userlist %}
-			<li><a href="/admin/edituser/{{person.username}}">{{person.name}}</a> | <a href="/admin/deleteuser">Delete User</a>
+			<li><a href="/admin/edituser/{{person.username}}">{{person.name}}</a> | <a href="/admin/deleteuser/{{person.username}}">Delete User</a>
 		{% endfor %}
 		</ol>
     </section>
-	
-	<section>
+    <section>	
+    	<h2>Add a user here</h2>
+	<p><a href="/admin/adduser">Add a user</a></p>
+    </section>
+    <section>
         <h2> </h2>
 		<a href="/"> Return to Home</a>
     </section>

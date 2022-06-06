@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <meta charset="utf-8">
-   <title>Add a User</title>
+   <title>Confirmation</title>
    <style>
 		h1, h2, h3 {
 		 font-family: 'Merriweather', serif;    
@@ -35,16 +35,10 @@
 	</style>
 </head>
 <body>
-    <h1>Admin Menu</h1>
+   <h1>Admin Menu</h1>
     <section>
-        <h2>Add a User</h2>
-		<p><strong>If a user already exists, you will be brought back to the Admin Menu.</strong></p>
-		<form action="/admin/add_user_confirm" method="POST">
-			User Name: <input name="un0" value="" /><br /><br>
-			Password: <input name="pw1" value="" /><br /><br>
-			Full Name: <input name="fname2" value="" /><br /><br>
-			<input type="submit" value="Add User" />
-		</form>
+        <h2>Confirmed!</h2>
+		<p><strong>{{ name }} has been added to the system.</strong></p>
     </section>
 	<section>
         <h2> </h2>

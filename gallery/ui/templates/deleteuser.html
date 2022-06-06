@@ -37,10 +37,14 @@
 <body>
    <h1>Admin Menu</h1>
     <section>
-        <h2>Edit User</h2>
-		<form method="POST">
-			User Name: <input name="un0" value="" /><br /><br>
-			<input type="submit" value="Submit" />
+        <h2>Delete User: {{name}}</h2>
+	<p><strong>Are you sure you wish to delete {{name}}? Click Yes to continue. Click Cancel to return to the Admin Menu.</p>
+		<form action="/admin/delete_user_confirm/{{name}}" method="POST">
+			<input type="submit" value="Yes" />
+		</form>
+		<br>
+		<form action="/admin" method="GET">
+			<input type="submit" value="Cancel" />
 		</form>
     </section>
 	<section>

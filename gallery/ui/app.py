@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request, render_template, jsonify, redirect
+from flask import request, render_template, jsonify, redirect, flash
 import json
 from gallery.tools.db import *
 
@@ -28,6 +28,18 @@ def add_users():
     return render_template('adduser.html')
 
 
+@app.route('/admin/add_user_confirm', methods=['POST'])
+def begin_add():
+   username = request.form['un0']
+   pw = request.form['pw1']
+   fname = request.form['fname2']
+   if usercheck(username):
+       return redirect('/admin')
+   else: 
+       user_add(username, pw, fname)
+       return render_template('addeduserconfirm.html', name=fname)
+
+
 @app.route('/admin/edituser/<name>', methods=['GET'])
 def edit_user(name):
     return render_template('edituser.html', name=name)
@@ -44,9 +56,15 @@ def make_edit(name):
     return redirect('/admin/edituser/' + name)
 
 
-@app.route('/admin/deleteuser')
-def delete_user():
-	return render_template('deleteuser.html')
+@app.route('/admin/deleteuser/<name>', methods=['GET'])
+def delete_user(name):
+	return render_template('deleteuser.html', name=name)
+
+
+@app.route('/admin/delete_user_confirm/<name>', methods=['POST'])
+def delete_confirm(name):
+    delete(name)
+    return redirect('/admin')
 
 
 def main():
