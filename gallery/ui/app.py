@@ -67,13 +67,3 @@ def delete_confirm(name):
     return redirect('/admin')
 
 
-def main():
-    x=[]
-    connect()
-    testing = execute('select * from users')
-    for row in testing:
-        x.append('name:' + row[2] + ', username:' + row[0])
-    print(json.dumps(x))
-
-if __name__=="__main__":
-    main()
