@@ -50,9 +50,9 @@ def put_object(bucket_name, key, value):
     return True
 
 def main():
-    #create_bucket('edu.au.cc.b0rk-image-gallery2.0', 'us-east-2')
-    #put_object('edu.au.cc.b0rk-image-gallery', 'testing', 'upload')
-    print(get_object('edu.au.cc.b0rk-image-gallery', 'testing')['Body'].read())
+    #create_bucket('edu.au.cc.b0rk-image-gallery2.0', 'ig-lecture-test')
+    #put_object('edu.au.cc.b0rk-image-gallery', 'banana', 'green')
+    #print(get_object('edu.au.cc.b0rk-image-gallery', 'banana')['Body'].read())
 
 if __name__ == '__main__':
     main()
