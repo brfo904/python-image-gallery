@@ -5,7 +5,7 @@ CONFIG_BUCKET="edu.au.cc.b0rk-image-gallery-config"
 
 # Install packages
 yum -y update
-yum install -y python3 git postgres postgresql-devel gcc
+yum install -y python3 git postgres postgresql-devel python3-devel gcc
 amazon-linux-extras install -y nginx1
 
 # Configure/install custom software
