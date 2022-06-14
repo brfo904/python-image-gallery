@@ -1,6 +1,6 @@
 import psycopg2
 import json
-from gallery.tools.secrets import get_secret_image_gallery
+from gallery.aws.secrets import get_secret_image_gallery
 
 db_name = "image_gallery"
 connection = None

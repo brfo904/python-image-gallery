@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, render_template, jsonify, redirect, flash
 import json
-from gallery.tools.db import *
+from gallery.data.db import *
 
 app = Flask(__name__)
 connect()
