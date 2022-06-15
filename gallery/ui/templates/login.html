@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <meta charset="utf-8">
-   <title>Add a User</title>
+   <title>Image Gallery: Login</title>
    <style>
 		h1, h2, h3 {
 		 font-family: 'Merriweather', serif;    
@@ -32,23 +32,26 @@
 		   clear: left;
 		   width: 90%;    
 		}
+		form {
+		   font-family: 'Open Sans', Arial, sans-serif;
+		}
 	</style>
 </head>
 <body>
-    <h1>Admin Menu</h1>
+   <h1>Welcome to the Image Gallery</h1>
     <section>
-        <h2>Add a User</h2>
-		<p><strong>If a user already exists, you will be brought back to the Admin Menu.</strong></p>
-		<form action="/admin/add_user_confirm" method="POST">
-			User Name: <input name="un0" value="" /><br /><br>
-			Password: <input name="pw1" value="" /><br /><br>
-			Full Name: <input name="fname2" value="" /><br /><br>
-			<input type="submit" value="Add User" />
+        <h2>Login Page</h2>
+	<p><strong>Please enter your username & password:</p>
+		<form action="/login" method="POST">
+			<label for="username">Username:</label><br>
+			<input type="text" id="username" name="username"><br>
+			<label for="pwd">Password:</label><br>
+			<input type="password" id="pwd" name="pwd"><br><br>
+			<input type="submit" value="Login">
 		</form>
     </section>
 	<section>
         <h2> </h2>
-		<a href="/admin/users">Return to Admin Menu</a>
     </section>
 </body>
 </html>

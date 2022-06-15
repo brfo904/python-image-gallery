@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <meta charset="utf-8">
-   <title>Add a User</title>
+   <title>View Images</title>
    <style>
 		h1, h2, h3 {
 		 font-family: 'Merriweather', serif;    
@@ -32,23 +32,21 @@
 		   clear: left;
 		   width: 90%;    
 		}
+		.center{
+		   text-align: center,
+		   font-family: 'Open Sans', Arial, sans-serif;
+		}
 	</style>
 </head>
 <body>
-    <h1>Admin Menu</h1>
+   <h1>Hello, {{ full_name }}. Welcome to your Image Gallery!</h1>
     <section>
-        <h2>Add a User</h2>
-		<p><strong>If a user already exists, you will be brought back to the Admin Menu.</strong></p>
-		<form action="/admin/add_user_confirm" method="POST">
-			User Name: <input name="un0" value="" /><br /><br>
-			Password: <input name="pw1" value="" /><br /><br>
-			Full Name: <input name="fname2" value="" /><br /><br>
-			<input type="submit" value="Add User" />
-		</form>
+        <h2>Uploaded Images</h2>
+	<p>images to come soon</p>
     </section>
-	<section>
-        <h2> </h2>
-		<a href="/admin/users">Return to Admin Menu</a>
+    <section>
+	<h2>Pages</h2>
+			<p class="center"><a href="/">Home</a> | <a href="/users/uploadimg">Upload more Images</a></p>
     </section>
 </body>
 </html>

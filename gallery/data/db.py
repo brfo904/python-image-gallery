@@ -1,6 +1,7 @@
 import psycopg2
 import json
 from gallery.aws.secrets import get_secret_image_gallery
+from gallery.data.user import User
 
 db_name = "image_gallery"
 connection = None
@@ -81,6 +82,17 @@ def user_add(username, pword, fname):
    connect()
    add = "INSERT INTO users (username, password, full_name) VALUES (%s, %s, %s);"
    results = execute(add, (username, pword, fname))
+
+
+def get_user(username):
+   connect()
+   user_search = "select * from users where username=(%s);"
+   results = execute(user_search, (username,))
+   row = results.fetchone()
+   if row is None:
+      return None
+   else:
+      return User(row[0], row[1], row[2])
 
 
 def main():

@@ -1,19 +1,24 @@
 from flask import Flask
-from flask import request, render_template, jsonify, redirect, flash
+from flask import request, render_template, jsonify, redirect, flash, session
 import json
 from gallery.data.db import *
 
 app = Flask(__name__)
+app.secret_key = b'093h0wndnskanv[q34f@4'
 connect()
 searchusers = "select * from users;"
 
-
 @app.route('/')
-def homepage():
-    return render_template('home.html')
+def redirect_user():
+    return redirect('/login')
 
 
-@app.route('/admin')
+@app.route('/<name>')
+def homepage(name):
+    return render_template('home.html', name=name)
+
+
+@app.route('/admin/users')
 def main_menu():
     return render_template('adminmenu.html', userlist=userlist())
 
@@ -64,6 +69,33 @@ def delete_user(name):
 @app.route('/admin/delete_user_confirm/<name>', methods=['POST'])
 def delete_confirm(name):
     delete(name)
-    return redirect('/admin')
+    return redirect('/admin/users')
 
+
+@app.route('/users/<name>/viewimg', methods=['GET'])
+def retrieve_images(name):
+    return render_template('viewimg.html', name=name)
+
+
+@app.route('/users/<name>/uploadimg', methods=['GET'])
+def upload_images(name):
+    return render_template('uploadimg.html', name=name)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_screen():
+    if request.method == 'POST':
+        user = get_user(request.form["username"])
+        if user is None or user.password != request.form["pwd"]:
+            return redirect('/failedauth')
+        else:
+            session['username'] = request.form["username"]
+            return redirect('/'+session['username'])
+    else:
+        return render_template('login.html')
+
+
+@app.route('/failedauth')
+def failed_auth():
+    return render_template('failedlogin.html')
 
