@@ -26,7 +26,8 @@ def homepage(name):
 def main_menu():
     if not check_admin():
         return redirect('/login')
-    return render_template('adminmenu.html', userlist=userlist())
+    u=get_session_username()
+    return render_template('adminmenu.html', userlist=userlist(), name=u)
 
 
 @app.route('/admin/listusers')
@@ -92,7 +93,7 @@ def delete_confirm(name):
 
 #admin methods
 def check_admin():
-   username = session['username']
+   username = get_session_username()
    confirm = is_admin(username)
    return confirm == 1
 
@@ -100,12 +101,24 @@ def check_admin():
 #user menus
 @app.route('/users/<name>/viewimg', methods=['GET'])
 def retrieve_images(name):
-    return render_template('viewimg.html', name=name)
+    u = get_session_username()
+    return render_template('viewimg.html', name=u)
 
 
 @app.route('/users/<name>/uploadimg', methods=['GET'])
 def upload_images(name):
-    return render_template('uploadimg.html', name=name)
+    u = get_session_username()
+    return render_template('uploadimg.html', name=u)
+
+
+@app.route('/users/processupload', methods=['POST'])
+def process_upload():
+    username = get_session_username()
+
+
+#user methods
+def get_session_username():
+   return session['username']
 
 
 #login pages

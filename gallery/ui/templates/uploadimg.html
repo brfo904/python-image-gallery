@@ -42,11 +42,20 @@
    <h1>Welcome to your Image Gallery!</h1>
     <section>
         <h2>Upload a new image!</h2>
-	<p>To come.</p>
+	<p>Use the below form to upload your image file</p>
+	<p>Accepted formats: .gif, .jpg, .jpeg, .png</p>
+	<form enctype="multipart/form-data">
+	   <input type="file" name="file">
+	   <input action="/users/processupload" method="POST" type="submit" value="Upload">
+	</form>
+	<br>
+	<form action="/{{ name }}" method="GET">
+	   <input type="submit" value="Cancel">
+	</form> 
     </section>
     <section>
 	<h2>Pages</h2>
-			<p class="center"><a href="/">Home</a> | <a href="/users/<name>/viewimg">View your Images</a></p>
+			<p class="center"><a href="/{{ name }}">Home</a> | <a href="/users/{{ name }}/viewimg">View your Images</a></p>
     </section>
 </body>
 </html>
