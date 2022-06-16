@@ -95,6 +95,17 @@ def get_user(username):
       return User(row[0], row[1], row[2])
 
 
+def is_admin(username):
+   connect()
+   check = "select * from users where username=(%s) AND isAdmin=1;"
+   results = execute(check, (username,))
+   row = results.fetchone()
+   if row is None:
+      return 0
+   else:
+      return 1
+
+
 def main():
     connect()
     res = execute('select * from users')

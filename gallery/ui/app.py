@@ -1,10 +1,13 @@
 from flask import Flask
 from flask import request, render_template, jsonify, redirect, flash, session
 import json
+from ..aws.session_secret import get_secret_flask_session
 from gallery.data.db import *
 
+from functools import wraps
+
 app = Flask(__name__)
-app.secret_key = b'093h0wndnskanv[q34f@4'
+app.secret_key = get_secret_flask_session()
 connect()
 searchusers = "select * from users;"
 
@@ -18,8 +21,11 @@ def homepage(name):
     return render_template('home.html', name=name)
 
 
+# admin menu items
 @app.route('/admin/users')
 def main_menu():
+    if not check_admin():
+        return redirect('/login')
     return render_template('adminmenu.html', userlist=userlist())
 
 
@@ -30,11 +36,15 @@ def list_users():
 
 @app.route('/admin/adduser')
 def add_users():
+    if not check_admin():
+        return redirect('/login')
     return render_template('adduser.html')
 
 
 @app.route('/admin/add_user_confirm', methods=['POST'])
 def begin_add():
+   if not check_admin():
+       return redirect('/login')
    username = request.form['un0']
    pw = request.form['pw1']
    fname = request.form['fname2']
@@ -47,11 +57,15 @@ def begin_add():
 
 @app.route('/admin/edituser/<name>', methods=['GET'])
 def edit_user(name):
+    if not check_admin():
+        return redirect('/login')
     return render_template('edituser.html', name=name)
 
 
 @app.route('/admin/edit_user_confirm/<name>', methods=['POST'])
 def make_edit(name):
+    if not check_admin():
+        return redirect('/login')
     pw = request.form['pw']
     fname = request.form['fname']
     if pw != "":
@@ -63,15 +77,27 @@ def make_edit(name):
 
 @app.route('/admin/deleteuser/<name>', methods=['GET'])
 def delete_user(name):
-	return render_template('deleteuser.html', name=name)
+    if not check_admin():
+        return redirect('/login')
+    return render_template('deleteuser.html', name=name)
 
 
 @app.route('/admin/delete_user_confirm/<name>', methods=['POST'])
 def delete_confirm(name):
+    if not check_admin():
+        return redirect('/login')    
     delete(name)
     return redirect('/admin/users')
 
 
+#admin methods
+def check_admin():
+   username = session['username']
+   confirm = is_admin(username)
+   return confirm == 1
+
+
+#user menus
 @app.route('/users/<name>/viewimg', methods=['GET'])
 def retrieve_images(name):
     return render_template('viewimg.html', name=name)
@@ -82,6 +108,7 @@ def upload_images(name):
     return render_template('uploadimg.html', name=name)
 
 
+#login pages
 @app.route('/login', methods=['GET', 'POST'])
 def login_screen():
     if request.method == 'POST':
