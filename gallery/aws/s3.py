@@ -1,5 +1,6 @@
 import logging
 import boto3
+import os
 from botocore.exceptions import ClientError
 
 
@@ -47,12 +48,16 @@ def put_object(bucket_name, key, value):
     except ClientError as e:
         logging.error(e)
         return False
+
+
+def upload_file(file_name, bucket, object_name=None):
+    if object_name is None:
+        object_name = os.path.basename(file_name)
+
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(file_name, bucket, object_name)
+    except ClientError as e:
+        logging.error(e)
+        return False
     return True
-
-def main():
-    #create_bucket('edu.au.cc.b0rk-image-gallery2.0', 'ig-lecture-test')
-    #put_object('edu.au.cc.b0rk-image-gallery', 'banana', 'green')
-    #print(get_object('edu.au.cc.b0rk-image-gallery', 'banana')['Body'].read())
-
-if __name__ == '__main__':
-    main()

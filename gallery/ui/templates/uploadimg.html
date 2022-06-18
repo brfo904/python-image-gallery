@@ -39,23 +39,37 @@
 	</style>
 </head>
 <body>
+   {% block content %}
+   <div>
+      {% for message in get_flashed_messages() %}
+	  <div class="alert alert-warning">
+	      <button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	  </div>
+      {% endfor %}
+
+      {% block page_content %}{% endblock %}
+   </div>
+   {% endblock %}
+
    <h1>Welcome to your Image Gallery!</h1>
     <section>
         <h2>Upload a new image!</h2>
 	<p>Use the below form to upload your image file</p>
 	<p>Accepted formats: .gif, .jpg, .jpeg, .png</p>
-	<form enctype="multipart/form-data">
-	   <input type="file" name="file">
-	   <input action="/users/processupload" method="POST" type="submit" value="Upload">
+	<form action="/users/processupload" enctype="multipart/form-data" method="POST">
+	   <input type="hidden" name="key" value="{{ username }}/uploads/" /><br />
+	   <input type="file" name="file" accept="image/*" />
+	   <input type="submit" value="Upload" />
 	</form>
 	<br>
-	<form action="/{{ name }}" method="GET">
+	<form action="/" method="GET">
 	   <input type="submit" value="Cancel">
 	</form> 
     </section>
     <section>
 	<h2>Pages</h2>
-			<p class="center"><a href="/{{ name }}">Home</a> | <a href="/users/{{ name }}/viewimg">View your Images</a></p>
+			<p class="center"><a href="/">Home</a> | <a href="/users/viewimg">View your Images</a></p>
     </section>
 </body>
 </html>

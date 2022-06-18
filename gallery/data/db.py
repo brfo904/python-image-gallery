@@ -42,7 +42,7 @@ def execute(query, args=None):
         cursor.execute(query, args)
     return cursor
 
-
+#admin user methods
 def userlist():
    connect()
    search = 'select * from users;'
@@ -104,6 +104,18 @@ def is_admin(username):
       return 0
    else:
       return 1
+
+
+#user methods
+def store_filename(owner, file):
+    connect()
+    store = "insert into images(owner, file, upload_date) values (%s, %s, NOW())"
+    results = execute(store, (owner, file,))
+    row = results.fetchall()
+    if row is None:
+        return False
+    else:
+        return True
 
 
 def main():

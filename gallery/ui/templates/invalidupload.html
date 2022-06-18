@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <meta charset="utf-8">
-   <title>Admin Menu</title>
+   <title>Invalid Credentials</title>
    <style>
 		h1, h2, h3 {
 		 font-family: 'Merriweather', serif;    
@@ -32,27 +32,19 @@
 		   clear: left;
 		   width: 90%;    
 		}
+		form {
+		   font-family: 'Open Sans', Arial, sans-serif;
+		}
 	</style>
 </head>
 <body>
-   <h1>Admin Menu</h1>
+   <h1>Invalid File Format!</h1>
     <section>
-        <h2>Welcome to the Admin Menu, {{ name }}</h2>
-		<h3>Users:</h3>
-		<ol>
-		{% for person in userlist %}
-			<li><a href="/admin/edituser/{{person.username}}">{{person.name}}</a> | <a href="/admin/deleteuser/{{person.username}}">Delete User</a>
-		{% endfor %}
-		</ol>
+	<p><strong>The file provided ({{ file }}) is not valid. Please use the correct format (.gif, .jpg, .jpeg, or .jpg).</p>
+	<p><a href="/users/uploadimg">Return</a></p>
     </section>
-    <section>	
-    	<h2>Add a user here</h2>
-	<p><a href="/admin/adduser">Add a user</a></p>
-    </section>
-    <section>
+	<section>
         <h2> </h2>
-		<a href="/"> Return to Home</a>
     </section>
-
 </body>
 </html>

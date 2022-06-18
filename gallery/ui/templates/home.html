@@ -35,13 +35,13 @@
 	</style>
 </head>
 <body>
-   <h1>Welcome to the Home Page</h1>
+   <h1>Welcome to the Home Page, {{ name }}</h1>
     <section>
         <h2>Main Menu</h2>
 		<p>What page would you like to visit?</p>
 			<ol>
-				<li><a href="/users/{{ name }}/uploadimg">Upload Image</a></li>
-				<li><a href="/users/{{ name }}/viewimg">View Images</a></li>
+				<li><a href="/users/uploadimg">Upload Image</a></li>
+				<li><a href="/users/viewimg">View Images</a></li>
 			</ol>
     </section>
     <section>
@@ -49,5 +49,10 @@
 			<ol>
 				<li><a href="/admin/users">Admin Menu</a></li>
 			</ol>
+    </section>
+    <section>
+	<h2>Log out</h2>
+	<p><a href="/logout">Log out</a></p>
+
 </body>
 </html>
