@@ -2,6 +2,7 @@ import psycopg2
 import json
 from gallery.aws.secrets import get_secret_image_gallery
 from gallery.data.user import User
+from gallery.data.image import Image
 
 db_name = "image_gallery"
 connection = None
@@ -50,7 +51,7 @@ def userlist():
    userlist = []
    for row in users:
        userlist.append({'name':row[2], 'username':row[0]})
-   return userlist 
+   return userlist
 
 
 def update_pw(username, pw):
@@ -78,10 +79,10 @@ def usercheck(username):
    return(results.rowcount > 0)
 
 
-def user_add(username, pword, fname):
+def user_add(username, pword, fname, admin):
    connect()
-   add = "INSERT INTO users (username, password, full_name) VALUES (%s, %s, %s);"
-   results = execute(add, (username, pword, fname))
+   add = "INSERT INTO users (username, password, full_name, isAdmin) VALUES (%s, %s, %s, %s);"
+   results = execute(add, (username, pword, fname, admin,))
 
 
 def get_user(username):
@@ -111,18 +112,46 @@ def store_filename(owner, file):
     connect()
     store = "insert into images(owner, file, upload_date) values (%s, %s, NOW())"
     results = execute(store, (owner, file,))
-    row = results.fetchall()
-    if row is None:
-        return False
-    else:
-        return True
+
+
+def remove_filename(owner, file, id):
+    connect()
+    remove = "delete from images where owner=(%s) AND file=(%s) AND image_id=(%s)"
+    results = execute(remove, (owner, file, id,))
+
+
+def get_image_list(owner):
+   connect()
+   images = "select file, owner, image_id from images where owner=(%s)"
+   results = execute(images, (owner,))
+   image_list = []
+   for row in results:
+       img = Image(row[0], row[1], row[2])
+       image_list.append(img)
+   return image_list
+
+
+def get_image(filename, owner):
+   connect()
+   image = "select file, owner, image_id from images where owner=(%s) and file=(%s)"
+   results = execute(image, (owner, filename,))
+   row = results.fetchone()
+   if row is None:
+      return None
+   else:
+      return Image(row[0], row[1], row[2])
 
 
 def main():
-    connect()
-    res = execute('select * from users')
-    for row in res:
-        print(row[0] + ", " + row[1] + ", " + row[2])
+   connect()
+   images = "select file, owner from images where owner='barney'"
+   results = execute(images)
+   image_list = []
+   for row in results:
+       img = Image(row[0], row[1])
+       image_list.append(img)
+   for image in image_list:
+        print(image.file_name + '\n')
 
 
 if __name__ == '__main__':

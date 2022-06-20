@@ -61,3 +61,18 @@ def upload_file(file_name, bucket, object_name=None):
         logging.error(e)
         return False
     return True
+
+
+def download_file(bucket, key, file_name):
+    s3_client = boto3.client('s3')
+    s3_client.download_file(bucket, key, file_name)
+
+
+def delete_file(bucket, key):
+    s3_client = boto3.client('s3')
+    response = s3_client.delete_object(
+        Bucket = bucket, 
+        Key = key
+    )
+    print(response)
+

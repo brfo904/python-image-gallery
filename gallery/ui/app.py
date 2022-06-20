@@ -1,9 +1,9 @@
 import os
 from flask import Flask
-from flask import request, render_template, jsonify, redirect, flash, session
+from flask import request, render_template, jsonify, redirect, flash, session, send_from_directory
 import json
 from ..aws.session_secret import get_secret_flask_session
-from ..aws.s3 import create_bucket, put_object, upload_file
+from ..aws.s3 import create_bucket, put_object, upload_file, download_file, delete_file
 from gallery.data.db import *
 
 from functools import wraps
@@ -11,7 +11,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = get_secret_flask_session()
-app.config['UPLOAD_FOLDER'] = 'project/uploads'
+app.config['UPLOAD_FOLDER'] = 'gallery/ui/static/project/uploads'
+DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/downloads'
 connect()
 ALLOWED_EXTENSIONS = {'gif', 'jpg', 'jpeg', 'png'}
 
@@ -55,17 +56,19 @@ def begin_add():
    username = request.form['un0']
    pw = request.form['pw1']
    fname = request.form['fname2']
+   is_admin = request.form['admin']
    if usercheck(username):
-       return redirect('/admin')
+       flash('User with username: ' + username + ' already exists!')
+       return redirect('/admin/adduser')
    else: 
-       user_add(username, pw, fname)
-       return render_template('addeduserconfirm.html', name=fname)
+       user_add(username, pw, fname, is_admin)
+       flash(fname + ' has been created!')
+       return redirect('/admin/adduser')
 
 
 @app.route('/admin')
 def logout_admin():
-    logout()
-    return redirect('/login')
+    return redirect('/admin/users')
 
 
 @app.route('/admin/edituser/<name>', methods=['GET'])
@@ -115,12 +118,18 @@ def check_admin():
 
 
 #user menus
-@app.route('/users/viewimg', methods=['GET'])
-def retrieve_images():
+@app.route('/users/viewimg')
+def view_images():
     if not (logged_in()):
         return redirect('/login')
     u = get_session_username()
-    return render_template('viewimg.html')
+    images = get_image_list(u)
+    bucket = get_upload_path()
+    for image in images:
+        key = get_session_username()+'/uploads/'+image.file_name
+        download_file(bucket, key, image.file_name)
+        os.system(f'mv {image.file_name} gallery/ui/static/project/downloads/')
+    return render_template('viewimg.html', imagelist=images)
 
 
 @app.route('/users/uploadimg', methods=['GET'])
@@ -147,6 +156,7 @@ def process_upload():
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
         bucket = get_upload_path()
         upload_file(app.config['UPLOAD_FOLDER'] + '/' + imagename, bucket, request.form["key"]+image.filename)
+        store_filename(get_session_username(), imagename)
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
         flash('File uploaded.')
         return redirect('/users/uploadimg')
@@ -160,6 +170,28 @@ def invalid_upload():
 @app.route('/users')
 def redirect_user():
     return redirect('/')
+
+
+@app.route('/static/project/downloads/<image_name>')
+def send_file(image_name):
+    try:
+        return send_from_directory(DOWNLOAD_FOLDER, image_name, as_attachment=False)
+    except FileNotFoundError:
+        print('File not found!')
+
+
+@app.route('/users/deleteimg/<image_name>')
+def delete_image(image_name):
+    img = get_image(image_name, get_session_username())
+    if img is None:
+        flash('Image not found in Database!')
+        return redirect('/users/viewimg')
+    bucket = get_upload_path()
+    key = get_session_username()+'/uploads/'+img.file_name
+    delete_file(bucket, key)
+    remove_filename(get_session_username(), img.file_name, img.id)
+    flash('Image: ' + img.file_name + ' deleted.')
+    return redirect('/users/viewimg')
 
 
 #user methods
@@ -182,6 +214,11 @@ def logged_in():
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def get_download_path():
+    path = 'edu.au.cc.b0rk-image-gallery.'+get_session_username()+'.uploads'
+    return path
 
 
 def get_upload_path():

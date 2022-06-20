@@ -48,12 +48,30 @@
 	</style>
 </head>
 <body>
-   <h1>Hello, {{ name }}}!</h1>
+    {% block content %}
+    <div>
+       {% for message in get_flashed_messages() %}
+          <div class="alert alert-warning">
+             <button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	  </div>
+       {% endfor %}
+       {% block page_content %}{% endblock %}
+    </div>
+    {% endblock %}
+   <h1>Hello!</h1>
     <section>
         <h2>Welcome to your Image Gallery!</h2>
 	<div id="thumbnails">
 	{% for image in imagelist %}
-            <img src="{{ image.source }}"/>
+	<div>
+           <span>
+           <a href="/static/project/downloads/{{ image.file_name }}"><img src="/static/project/downloads/{{ image.file_name }}" /></a>
+           <br>
+           <a class="center" href="/users/deleteimg/{{ image.file_name }}">Delete</a>
+	   <br>
+           </span>
+	</div>
         {% endfor %}
     </section>
     <section>

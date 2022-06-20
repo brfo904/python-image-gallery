@@ -35,14 +35,28 @@
 	</style>
 </head>
 <body>
+	{% block content %}
+	<div>
+   	{% for message in get_flashed_messages() %}
+	  <div class="alert alert-warning">
+		 <button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{ message }}
+	  </div>
+   	{% endfor %}
+   	{% block page_content %}{% endblock %}
+	</div>
+	{% endblock %}
     <h1>Admin Menu</h1>
     <section>
         <h2>Add a User</h2>
-		<p><strong>If a user already exists, you will be brought back to the Admin Menu.</strong></p>
+		<p><strong>Please enter the below details!</strong></p>
 		<form action="/admin/add_user_confirm" method="POST">
 			User Name: <input name="un0" value="" /><br /><br>
 			Password: <input name="pw1" value="" /><br /><br>
 			Full Name: <input name="fname2" value="" /><br /><br>
+			Is Admin? <input type="radio" name="admin" value="1" />Yes 
+				  <input type="radio" name="admin" value="0" />No
+			<br><br>
 			<input type="submit" value="Add User" />
 		</form>
     </section>
