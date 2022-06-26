@@ -1,0 +1,4 @@
+---
+all:
+  hosts: 
+    ec2-3-84-148-162.compute-1.amazonaws.com:
