@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 def get_secret_flask_session():
     global secret
-    secret_name = "arn:aws:secretsmanager:us-east-1:456441622985:secret:sec-ig-flask-session-Ef5Htk"
+    secret_name = "sec-ig-flask-session"
     region_name = "us-east-1"
 
     # Create a Secrets Manager client
