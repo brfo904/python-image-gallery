@@ -8,7 +8,6 @@ from botocore.exceptions import ClientError
 
 
 def get_secret_flask_session():
-    global secret
     secret_name = "sec-ig-flask-session"
     region_name = "us-east-1"
 
