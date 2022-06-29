@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = get_secret_flask_session()
 app.config['UPLOAD_FOLDER'] = 'gallery/ui/static/project/uploads'
-DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/downloads'
+DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/images'
 connect()
 ALLOWED_EXTENSIONS = {'gif', 'jpg', 'jpeg', 'png'}
 
@@ -128,7 +128,7 @@ def view_images():
     for image in images:
         key = get_session_username()+'/uploads/'+image.file_name
         download_file(bucket, key, image.file_name)
-        os.system(f'mv {image.file_name} gallery/ui/static/project/downloads/')
+        os.system(f'mv {image.file_name} gallery/ui/static/project/images/')
     return render_template('viewimg.html', imagelist=images)
 
 
