@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask import request, render_template, jsonify, redirect, flash, session, send_from_directory
 import json
-#from ..aws.session_secret import get_secret_flask_session
+from ..aws.session_secret import get_secret_flask_session
 from ..aws.s3 import create_bucket, put_object, upload_file, download_file, delete_file
 from gallery.data.db import *
 
@@ -10,7 +10,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = get_flask()
+app.secret_key = get_secret_flask_session()
 app.config['UPLOAD_FOLDER'] = 'gallery/ui/static/project/uploads'
 DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/images'
 connect()
@@ -251,6 +251,3 @@ def failed_auth():
     return render_template('failedlogin.html')
 
 
-#container apps
-def get_flask():
-    return 'b0657ouf38465^&UTp8yiv$'
