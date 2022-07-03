@@ -10,7 +10,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = get_secret_flask_session()
+app.secret_key = get_flask()
 app.config['UPLOAD_FOLDER'] = 'gallery/ui/static/project/uploads'
 DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/images'
 connect()
@@ -250,3 +250,7 @@ def logout():
 def failed_auth():
     return render_template('failedlogin.html')
 
+
+#container apps
+def get_flask():
+    return 'b0657ouf38465^&UTp8yiv$'
