@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask import request, render_template, jsonify, redirect, flash, session, send_from_directory
 import json
-from ..aws.session_secret import get_secret_flask_session
+#from ..aws.session_secret import get_secret_flask_session
 from ..aws.s3 import create_bucket, put_object, upload_file, download_file, delete_file
 from gallery.data.db import *
 
