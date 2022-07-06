@@ -1,3 +1,4 @@
+import os
 import psycopg2
 import json
 from gallery.aws.secrets import get_secret_image_gallery
@@ -8,30 +9,34 @@ db_name = "image_gallery"
 connection = None
 
 def get_secret():
-    jsonString = get_secret_image_gallery()
-    return json.loads(jsonString)
+    return None
 
 
-def get_password(secret):
-    return secret['password']
+def get_password():
+    file = open("/mnt/data/imagegallery")
+    result = file.readline().strip()
+    file.close()
+    return result
+
+def get_host():
+    host = os.getenv('PG_HOST')
+    return host
 
 
-def get_host(secret):
-    return secret['host']
+def get_username():
+    user = os.getenv('IG_USER')
+    return user
 
 
-def get_username(secret):
-    return secret['username']
-
-
-def get_dbname(secret):
-    return secret['database_name']
+def get_dbname():
+    db = os.getenv('IG_DATABASE')
+    return db
 
 
 def connect():
     global connection
     secret = get_secret()
-    connection = psycopg2.connect(host=get_host(secret), dbname=get_dbname(secret), user=get_username(secret), password=get_password(secret))
+    connection = psycopg2.connect(host=get_host(), dbname=get_dbname(), user=get_username(), password=get_password())
     connection.set_session(autocommit=True)
 
 def execute(query, args=None):

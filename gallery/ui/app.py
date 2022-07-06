@@ -10,7 +10,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = get_secret_flask_session()
+app.secret_key = os.getenv('FLASK_SESSION_SECRET')
 app.config['UPLOAD_FOLDER'] = 'gallery/ui/static/project/uploads'
 DOWNLOAD_FOLDER = '/home/ec2-user/python-image-gallery/gallery/ui/static/project/images'
 connect()
