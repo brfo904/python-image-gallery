@@ -65,7 +65,7 @@ def get_secret_image_gallery():
 
 def get_secret_cognito_secret():
 
-    secret_name = "ig-congito-secret"
+    secret_name = "sec-ig-cognito-secret"
     region_name = "us-east-1"
 
     # Create a Secrets Manager client
@@ -111,3 +111,13 @@ def get_secret_cognito_secret():
             secret = get_secret_value_response['SecretString']
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+
+
+def main():
+    test = get_secret_cognito_secret()
+    print(test)
+
+
+if __name__ == '__main__':
+    main()
+
