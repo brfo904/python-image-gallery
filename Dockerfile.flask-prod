@@ -1,0 +1,38 @@
+FROM ubuntu:latest
+
+ENV PG_HOST="m6imagegallery.c33oyac2tqvj.us-east-1.rds.amazonaws.com"
+ENV PG_PORT="5432"
+ENV PG_DATA=/var/lib/postgresql/data/pgdata
+ENV IG_DATABASE="m6image_gallery"
+ENV IG_USER="image_gallery"
+ENV IG_PASSWD_FILE="/mnt/data/imagegallery"
+ENV S3_IMAGE_BUCKET="edu.au.cc.b0rk-image-gallery"
+ENV FLASK_SESSION_SECRET="b0657ouf38465^&UTp8yiv$"
+ENV USER_QUERY="'augrader', 'cpsc4973', 'AU Grader', 1"
+
+RUN apt-get update -y && apt install tzdata -y
+RUN apt-get update -y && apt-get install -y python3 python3-pip postgresql libpq-dev
+
+RUN mkdir /mnt/data/
+RUN echo "%7Mtg5bfXr<>-mF]h[}t}n|ZccNxyq%3">$IG_PASSWD_FILE
+RUN mkdir /app
+RUN echo '#!/usr/bin/bash' >> /app/createDB
+RUN echo 'export PGPASSWORD=$(head -n 1 $IG_PASSWD_FILE)' >> /app/createDB
+RUN echo 'psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "create table images(image_id serial primary key, file VARCHAR(300), owner varchar(200), upload_date TIMESTAMP);"'
+RUN echo 'psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "create table users(username VARCHAR(200) unique, password varchar(200), full_name VARCHAR(200), isAdmin INTEGER);"'
+RUN echo 'psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "insert into users(username, password, full_name, isAdmin) values ($USER_QUERY);"' >> /app/createDB
+RUN chmod +x /app/createDB
+
+RUN adduser ec2-user
+ADD ./ /home/ec2-user/python-image-gallery
+RUN chown -R ec2-user:ec2-user /home/ec2-user/python-image-gallery
+WORKDIR /home/ec2-user/python-image-gallery/
+RUN /app/createDB
+RUN rm Dockerfile.flask-prod
+RUN pip3 install -r requirements.txt
+user ec2-user
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=development
+
+CMD ["uwsgi", "--http", ":5555", "--mount", "/=gallery.ui.app:app", "--master", "--processes", "4", "--threads", "2"]
+

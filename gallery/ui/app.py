@@ -1,7 +1,8 @@
-import os
+import os, json
+
 from flask import Flask
 from flask import request, render_template, jsonify, redirect, flash, session, send_from_directory
-import json
+
 from ..aws.session_secret import get_secret_flask_session
 from ..aws.s3 import create_bucket, put_object, upload_file, download_file, delete_file
 from gallery.data.db import *
@@ -22,7 +23,7 @@ def homepage():
     if not (logged_in()):
         return redirect('/login')
     first_name = get_session_first_name()
-    return render_template('home.html', name=first_name)
+    return render_template('home.html')
 
 
 # admin menu items
@@ -32,7 +33,7 @@ def main_menu():
         logout()
         return redirect('/login')
     first_name = get_session_first_name()
-    return render_template('adminmenu.html', userlist=userlist(), name=first_name)
+    return render_template('adminmenu.html', userlist=userlist())
 
 
 @app.route('/admin/listusers')
@@ -206,7 +207,7 @@ def get_session_first_name():
 
 
 def logged_in():
-    if (session.get('username') is None):
+    if (session.get('user_id') is None):
         return False
     return True 
 
@@ -242,8 +243,8 @@ def login_screen():
 
 @app.route('/logout')
 def logout():
-    session['username'] = None
-    return redirect('/')
+   session["username"] = None
+   return redirect('/')
 
 
 @app.route('/failedauth')

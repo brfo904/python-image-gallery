@@ -112,12 +112,9 @@ def get_secret_cognito_secret():
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
 
+    if secret is None:
+        return decoded_binary_secret
+    else:
+        return secret
 
-def main():
-    test = get_secret_cognito_secret()
-    print(test)
-
-
-if __name__ == '__main__':
-    main()
 

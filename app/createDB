@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+export PGPASSWORD=$(head -n 1 /mnt/data/imagegallery)
+psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "create table images (image_id serial primary key, file VARCHAR(300), owner varchar(200), upload_date TIMESTAMP);"
+psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "create table users (username VARCHAR(200) unique, password varchar(200), full_name VARCHAR(200), isAdmin INTEGER default 0);"
+psql -h $PG_HOST -U $IG_USER $IG_DATABASE -c "insert into users (username, password, full_name, isAdmin) values ('augrader', 'cpsc4973', 'AU Grader', 1);"

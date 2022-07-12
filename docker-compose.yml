@@ -1,0 +1,14 @@
+---
+version: "3"
+
+services:
+
+   db:
+     image: database
+     volumes:
+       - "/home/ec2-user/data:/mnt/data/"
+       - dockervol:/var/lib/postgresql/data
+
+volumes:
+   dockervol:
+      external: true
